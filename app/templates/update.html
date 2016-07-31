@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% set TITLE = ('Update' | translate) %}
+
+{% block body %}
+{% if g.config['CHECK_FOR_UPDATES'] == -1: %}
+Updates are disabled.
+{% else: %}
+<script type="text/javascript">
+/*<![CDATA[*/
+var datepickerDateFormat = {{ g.config['DATEPICKER_DATE_FORMAT'] | json | safe }};
+/*]]>*/
+</script>
+Check for updates every {{ g.config['CHECK_FOR_UPDATES'] }} day(s).<br/>
+Last checked for updates: {{ last_checked }}<br/>
+Last checked for updates: <span {% if last_checked %}class="formatLocaleDate"{% endif %} data-format="yy-mm-dd">{{ last_checked }}</span><br/>
+    {% if error_msg: %}
+    <p class="error">{{ error_msg }}</p>
+    {% else: %}
+        <button class="updates_check">check for updates</button>
+        {% if commits_behind: %}
+        <table>
+            <tr>
+                <th>hash</th>
+                <th>date</th>
+                <th>author</th>
+                <th>summary</th>
+            </tr>
+            {% for commit in commits_behind: %}
+            <tr>
+                <td>{{ commit.hexsha[:7] }}</td>
+                <td class="formatLocaleDate" data-format="@">{{ commit.authored_date * 1000 }}</td>
+                <td><a href="mailto:{{ commit.author.email | escape }}" target="_blank">{{ commit.author.name | escape }}</a></td>
+                <td>{{ commit.summary }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button class="updates_do">update</button>
+        {% else %}
+        <p>No updates.</p>
+        {% endif %}
+    {% endif %}
+{% endif %}
+{% endblock %}

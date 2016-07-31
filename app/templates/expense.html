@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% set TITLE = ('Expenses' | translate) %}
+
+{% block body %}
+<script type="text/javascript">
+/*<![CDATA[*/
+var categoryTranslate = {{ 'Category' | translate | json | safe }},
+    datepickerDateFormat = {{ g.config['DATEPICKER_DATE_FORMAT'] | json | safe }},
+    datepickerFirstDayOfWeek = {{ g.config['DATEPICKER_FIRST_DAY_OF_WEEK'] | json | safe }},
+    datepickerLocaleStrings = {{ datepicker_locale_strings | json | safe }},
+    decimalChar = {{ g.config['DECIMAL_CHAR'] | json | safe }},
+    thousandsSeparator = {{ g.config['THOUSANDS_SEPARATOR'] | json | safe }},
+    currencySymbol = {{ g.config['CURRENCY_SYMBOL'] | json | safe }},
+    currencySymbolLead = {{ g.config['CURRENCY_SYMBOL_LEAD'] | json | safe }};
+/*]]>*/
+</script>
+<div class="sorting">{{ 'Sorting' | translate }}:<ul data-bind="foreach: orderBy">
+    <li>
+        <span class="field" data-bind="text: $data[0]"></span>
+        (<span class="direction" data-bind="text: $data[1]"></span>)
+        <span class="remove" data-bind="click: $parent.removeFromSorting">x</span>
+    </li>
+</ul></div>
+<div class="filter">{{ 'Filter' | translate }}: <ul data-bind="foreach: filter">
+    <li>
+        <span class="field" data-bind="text: $data[0]"></span>
+        <span data-bind="text: $data[1]"></span>
+        <span data-bind="text: $data[2]"></span>
+        <span class="remove" data-bind="click: $parent.removeFromFilter">x</span>
+    </li>
+</ul></div>
+<table class="observable">
+    <thead><tr>
+        <th class="first"></th>
+        <th name="date" class="sortable" data-bind="click: sortClick">{{ 'Date' | translate }}
+            <span class="sorted" data-bind="html: sortedDateChar"></span>
+        </th>
+        <th name="value" class="sortable" data-bind="click: sortClick">{{ 'Value' | translate }}
+            <span class="sorted" data-bind="html: sortedValueChar"></span>
+        </th>
+        <th name="category" class="sortable" data-bind="click: sortClick">{{ 'Category' | translate }}
+            <span class="sorted" data-bind="html: sortedCategoryChar"></span>
+        </th>
+        <th name="note" class="sortable" data-bind="click: sortClick">{{ 'Note' | translate }}
+            <span class="sorted" data-bind="html: sortedNoteChar"></span>
+        </th>
+    </tr></thead>
+    <tbody data-bind="foreach: {data: expenses,
+                                afterRender: afterRender}">
+    <!-- ko if: -1 === id() || _edit() -->
+        <tr data-bind="css: {newItem: -1 === id(),
+                             is_dark: isDark}">
+            <th class="first" data-bind="attr: {rowspan: _error() ? 2 : 1}">
+            <!-- ko if: -1 === id() && _changed -->
+                <span data-bind="click: _add"
+                      title="{{ 'add' | translate }}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span class="ui-icon ui-icon-plus"></span>
+                </span>
+            <!-- /ko -->
+            <!-- ko if: -1 !== id() && _changed -->
+                <span data-bind="click: _update"
+                      title="{{ 'submit' | translate }}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span class="ui-icon ui-icon-check"></span>
+                </span>
+            <!-- /ko -->
+            <!-- ko if: -1 !== id() || _changed -->
+                <span data-bind="click: _reset"
+                      title="{{ 'reset' | translate }}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span class="ui-icon ui-icon-arrowreturnthick-1-s"></span>
+                </span>
+            <!-- /ko -->
+            </th>
+            <td data-bind="style: {backgroundColor: color}">
+                <input type="text" class="date"
+                       data-bind="value: localDate,
+                                  css: 'expense_date_' + id(),
+                                  attr: {placeholder: -1 === id() ? '{{ 'Date' | translate }}' : ''}"/>
+            </td>
+            <td class="value"
+                data-bind="style: {backgroundColor: color}">
+                <input type="text"
+                       data-bind="value: localValue,
+                                  event: {focus: $root.selectAll};
+                                  attr: {placeholder: -1 === id() ? '{{ 'Value' | translate }}' : ''}"/>
+            </td>
+            <td data-bind="style: {backgroundColor: color}">
+                <select data-bind="foreach: $parent.categories, value: category_id">
+                    <option data-bind="text: name,
+                                       value: id,
+                                       style: {backgroundColor: color},
+                                       css: {is_dark: isDark}"></option>
+                </select>
+            </td>
+            <td data-bind="style: {backgroundColor: color}">
+                <input type="text" class="note"
+                       data-bind="textInput: note,
+                                  css: 'expense_note_' + id(),
+                                  attr: {placeholder: -1 === id() ? '{{ 'Note' | translate }}' : ''}"/>
+            </td>
+        </tr>
+    <!-- /ko -->
+    <!-- ko ifnot: -1 === id() || _edit() -->
+        <tr data-bind="css: {is_dark: isDark}">
+            <th class="first">
+                <span data-bind="click: _beEditable"
+                      title="{{ 'edit' | translate }}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span class="ui-icon ui-icon-pencil"></span>
+                </span>
+                <span data-bind="if: !_changed(), click: _delete"
+                      title="{{ 'delete' | translate }}"
+                      class="ui-widget ui-button ui-state-error ui-corner-all">
+                    <span class="ui-icon ui-icon-close"></span>
+                </span>
+            </th>
+            <td data-bind="style: {backgroundColor: color},
+                           text: localDate">
+            </td>
+            <td class="value"
+                data-bind="style: {backgroundColor: color},
+                           text: localValue">
+            </td>
+            <td data-bind="style: {backgroundColor: color},
+                           text: $parent.categoriesById[category_id()].name">
+            </td>
+            <td data-bind="style: {backgroundColor: color},
+                           text: note">
+            </td>
+        </tr>
+    <!-- /ko -->
+    <!-- ko if: _error -->
+        <tr>
+            <td colspan="4">
+                <div class="error" data-bind="text: _error"></div>
+            </td>
+        </tr>
+    <!-- /ko -->
+    </tbody>
+</table>
+{% endblock %}

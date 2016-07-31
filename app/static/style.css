@@ -1,0 +1,215 @@
+body {
+    background-color: #eee;
+    margin: 20px 100px;
+    font-family: sans-serif;
+}
+
+nav {
+    background: #D9EAD3;
+    border: 3px solid #B6D7A8;
+    border-radius: 5px;
+}
+
+nav ul {
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    display: inline-block;
+    list-style: none;
+}
+
+nav li.update {
+    float: right;
+}
+
+nav li a {
+    padding: 10px 20px;
+    display: inline-block;
+    color: #274E13;
+    text-decoration: none;
+}
+
+nav li.active a {
+    background-color: #B6D7A8;
+}
+
+nav li a:hover {
+    /*text-decoration: underline;*/
+    background-color: #B6D7A8;
+}
+
+nav .updates_available {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 30px;
+    display: inline-block;
+    padding: 4px;
+    margin: 0;
+    line-height: 0.7em;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.7em;
+    height: 5px;
+    position: relative;
+    top: -9px;
+    left: -2px;
+}
+
+table.observable {
+    border-collapse: separate;
+    border-spacing: 0px;
+    border: 1px solid #999;
+    width: 100%;
+}
+
+table.observable td,
+table.observable th {
+    padding: 1px 5px;
+    height: 35px;
+}
+
+table.observable th {
+    background-color: #ddd;
+    border-width: 1px;
+    border-style: solid;
+    border-top-color: #eee;
+    border-left-color: #eee;
+    border-right-color: #aaa;
+    border-bottom-color: #aaa;
+}
+
+table.observable th.sortable {
+    cursor: pointer;
+}
+
+table.observable tr.last_row td,
+table.observable tr.last_row th {
+    border-bottom: 3px double black;
+}
+
+table.observable th.new_year {
+    padding-top: 25px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    color: #f3f3f3;
+    font-size: 1.8em;
+    letter-spacing: 0.4em;
+}
+
+table.observable th.first {
+    width: 100px;
+}
+
+table.observable td {
+    border-bottom: 1px solid #ccc;
+}
+
+table.observable tr:last-child td {
+    border-bottom-width: 0;
+}
+
+table.observable tr.is_dark td,
+table.observable option.is_dark {
+    color: #fff;
+}
+
+table.observable tr.newItem td {
+    background: none !important;
+    /* border-top: 3px double #333; */
+    padding-top: 20px;
+    color: inherit;
+}
+
+table.observable td.center {
+    text-align: center;
+}
+
+table.observable td.mono {
+    font-family: monospace;
+}
+
+table.observable input[type=text],
+table.observable select {
+    height: 16px;
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #555;
+    box-shadow: 1px 2px 5px 0 rgba(0, 0, 0, 0.2) inset;
+    box-sizing: content-box;
+    outline: none;
+    width: 90px;
+    font-family: sans-serif;
+    font-size: 1em;
+}
+
+table.observable td.value,
+table.observable td.value input {
+    text-align: right;
+}
+
+table.observable input.note {
+    width: 200px;
+}
+
+table.observable span.sorted {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+div.sorting {
+    /* background: maroon; */
+}
+
+div.sorting ul, div.filter ul {
+    display: inline;
+    padding: 0;
+    list-style-type: none;
+}
+
+div.sorting li, div.filter li {
+    display: inline-block;
+    border: 1px solid #333;
+    border-radius: 3px;
+    background: #fff;
+    color: #333;
+    margin: 4px 0px;
+    padding: 2px 22px 2px 2px;
+    position: relative;
+    line-height: 0.9em;
+}
+
+div.sorting .remove, div.filter .remove {
+    background: rgb(255, 184, 184);
+    padding: 2px;
+    width: 1em;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+}
+
+div.sorting .remove:hover, div.filter .remove:hover {
+    background: red;
+}
+
+.error {
+    color: #660000;
+    background-color: #F4CCCC;
+    border: 3px solid #EA9999;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.notify {
+    transition-duration: 0.5s;
+}
+
+.notify.active {
+    color: #990000;
+    background-color: #ffffff;
+}

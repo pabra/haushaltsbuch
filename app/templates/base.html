@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+{% block head %}
+<title>{{ TITLE | escape }} - {{ 'Expenses Book' | translate | escape }}</title>
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery-ui.css') }}"/>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='spectrum.css') }}"/>
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">var page = {{ page | pprint | safe }};</script>
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-2.2.0.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jquery-ui.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='spectrum.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='knockout-3.4.0.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='knockout-save-observable-location-hash.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %} <!-- javascript -->
+{% endblock %} <!-- head -->
+</head>
+<body>
+    <nav><ul>
+        <li class="summary {%- if page == 'summary' %} active{% endif %}">
+            <a href="summary.html">{{ 'Summary' | translate | escape }}</a>
+        </li><li class="expense {%- if page == 'expense' %} active{% endif %}">
+            <a href="expense.html">{{ 'Expenses' | translate | escape }}</a>
+        </li><li class="category {%- if page == 'category' %} active{% endif %}">
+            <a href="category.html">{{ 'Categories' | translate | escape }}</a>
+        </li><li class="update {%- if page == 'update' %} active{% endif %}">
+            <a href="update.html">{{ 'Updates' | translate | escape }}{% if updates_available: %}<span class="updates_available notify">{{ updates_available }}</span>{% endif %}</a>
+        </li>
+    </ul></nav>
+    <h1>{{ TITLE | escape }}</h1>
+    {% block body %}
+    {% endblock %}
+</body>
+</html>

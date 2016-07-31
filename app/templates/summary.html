@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% set TITLE = ('Summary' | translate) %}
+
+{% block body %}
+<script type="text/javascript">
+/*<![CDATA[*/
+var decimalChar = {{ g.config['DECIMAL_CHAR'] | json | safe }},
+    thousandsSeparator = {{ g.config['THOUSANDS_SEPARATOR'] | json | safe }},
+    currencySymbol = {{ g.config['CURRENCY_SYMBOL'] | json | safe }},
+    currencySymbolLead = {{ g.config['CURRENCY_SYMBOL_LEAD'] | json | safe }};
+/*]]>*/
+</script>
+<table class="observable">
+    <tbody data-bind="foreach: {data: summaryAllYears, as: 'rowYear'}">
+        <tr>
+            <th class="new_year"
+                data-bind="text: rowYear.year,
+                           attr: {colspan: $parent.categoriesOrder().length + 2}"></th>
+        </tr>
+        <tr>
+            <th></th>
+            <!-- ko foreach: {data: $root.categoriesOrder, as: 'categoryId'} -->
+            <th data-bind="text: $root.categoriesById[categoryId].name"></th>
+            <!-- /ko -->
+            <th>total</th>
+        </tr>
+        <!-- ko if: rowYear.showMonth() && $parent.summaryPerYear()[rowYear.year] -->
+            <!-- ko foreach: {data: $parent.summaryPerYear()[rowYear.year], as: 'rowMonth'} -->
+        <tr data-bind="css: {'last_row': $index() === $root.summaryPerYear()[rowYear.year].length -1}">
+            <th>
+                <span class="ui-widget ui-button ui-state-default ui-corner-all"
+                      data-bind="click: $root.filterMonth">
+                    <span class="ui-icon ui-icon-zoomin"></span>
+                </span>
+                <span data-bind="text: rowMonth.year + '-' + rowMonth.month"></span>
+            </th>
+                <!-- ko foreach: {data: $root.categoriesOrder, as: 'categoryId'} -->
+            <td class="value" data-bind="text: rowMonth['locale_value_' + categoryId],
+                                         style: {backgroundColor: $root.categoriesById[categoryId].color}"></td>
+                <!-- /ko -->
+            <td class="value" data-bind="text: rowMonth.locale_value_total,
+                                         click: $root.filterMonth">
+                <span ></span
+            </td>
+        </tr>
+            <!-- /ko -->
+        <!-- /ko -->
+        <tr class="total">
+            <th>
+                <span data-bind="click: $parent.toggleYear,
+                                 attr: {title: rowYear.showMonth()?
+                                               {{ 'hide details' | translate | json }} :
+                                               {{ 'show details' | translate | json }}}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span data-bind="css: {'ui-icon-zoomout': rowYear.showMonth(),
+                                           'ui-icon-zoomin': !rowYear.showMonth()}"
+                          class="ui-icon"></span>
+                </span>
+                total
+            </th>
+            <!-- ko foreach: {data: $parent.categoriesOrder, as: 'categoryId'} -->
+            <td class="value" data-bind="text: rowYear['locale_value_' + categoryId],
+                                         style: {backgroundColor: $root.categoriesById[categoryId].color}"></td>
+            <!-- /ko -->
+            <td class="value" data-bind="text: rowYear.locale_value_total"></td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

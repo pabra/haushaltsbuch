@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% set TITLE = ('Categories' | translate) %}
+
+{% block body %}
+<table class="observable">
+    <thead><tr>
+        <th class="first"></th>
+        <th>{{ 'Name' | translate }}</th>
+        <th>{{ 'Color' | translate }}</th>
+    </tr></thead>
+    <tbody data-bind="foreach: {data: categories,
+                                afterRender: afterRender}">
+    <!-- ko if: -1 === id() || _edit() -->
+        <tr data-bind="css: {newItem: -1 === id(),
+                             is_dark: isDark}">
+            <th class="first" data-bind="attr: {rowspan: _error() ? 2 : 1}">
+            <!-- ko if: -1 === id() && _changed -->
+                <span data-bind="click: _add"
+                      title="{{ 'add' | translate }}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span class="ui-icon ui-icon-plus"></span>
+                </span>
+            <!-- /ko -->
+            <!-- ko if: -1 !== id() && _changed -->
+                <span data-bind="click: _update"
+                      title="{{ 'submit' | translate }}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span class="ui-icon ui-icon-check"></span>
+                </span>
+            <!-- /ko -->
+            <!-- ko if: -1 !== id() || _changed -->
+                <span data-bind="click: _reset"
+                      title="{{ 'reset' | translate }}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span class="ui-icon ui-icon-arrowreturnthick-1-s"></span>
+                </span>
+            <!-- /ko -->
+            </th>
+            <td data-bind="style: {backgroundColor: color}"><input type="text" data-bind="textInput: name, attr : {placeholder: -1 === id() ? '{{ 'new category' | translate }}' : ''}"/></td>
+            <td class="center" data-bind="style: {backgroundColor: color}"><input type="color" data-bind="value: color, css: 'category_' + id()" /></td>
+        </tr>
+    <!-- /ko -->
+    <!-- ko ifnot: -1 === id() || _edit() -->
+        <tr data-bind="css: {is_dark: isDark}">
+            <th class="first" data-bind="attr: {rowspan: _error() ? 2 : 1}">
+                <span data-bind="click: _beEditable"
+                      title="{{ 'edit' | translate }}"
+                      class="ui-widget ui-button ui-state-default ui-corner-all">
+                    <span class="ui-icon ui-icon-pencil"></span>
+                </span>
+                <span data-bind="if: !_changed(), click: _delete"
+                      title="{{ 'delete' | translate }}"
+                      class="ui-widget ui-button ui-state-error ui-corner-all">
+                    <span class="ui-icon ui-icon-close"></span>
+                </span>
+            </th>
+            <td data-bind="style: {backgroundColor: color},
+                           text: name">
+            </td>
+            <td class="mono"
+                data-bind="style: {backgroundColor: color},
+                           text: color">
+            </td>
+        </tr>
+    <!-- /ko -->
+    <!-- ko if: _error -->
+        <tr>
+            <td colspan="2">
+                <div class="error" data-bind="text: _error"></div>
+            </td>
+        </tr>
+    <!-- /ko -->
+    </tbody>
+</table>
+{% endblock %}
