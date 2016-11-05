@@ -10,6 +10,7 @@ msg_dict = {
     'Category': 'Kategorie',
     'category already exists %(existing)r, %(duplicate)r': 'Kategorie %(existing)r existiert bereits: %(duplicate)r',
     'category_id must be integer not %r': 'category_id muss integer sein, nicht %r',
+    'check for updates': 'auf Updates prüfen',
     'Color': 'Farbe',
     'Date': 'Datum',
     'dayNamesMin_Fr': 'Fr',

@@ -15,7 +15,7 @@ Last checked for updates: <span {% if last_checked %}class="formatLocaleDate"{% 
     {% if error_msg: %}
     <p class="error">{{ error_msg }}</p>
     {% else: %}
-        <button class="updates_check">check for updates</button>
+        <button class="updates_check">{{ 'check for updates' | translate }}</button>
         {% if commits_behind: %}
         <table>
             <tr>
