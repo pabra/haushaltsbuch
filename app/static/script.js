@@ -16,7 +16,7 @@ $(function() {
         listSort, CategoryModel, categoryModel, ExpenseModel, expenseModel,
         SummaryModel, summaryModel,
         formatCurrencyValue, parseCurrencyValue,
-        getFirstOfMonth, getLastOfMonth;
+        getFirstOfMonth, getLastOfMonth, unsetTimeOfDate;
 
     isInt = function (n){
         return Number(n) === n && n % 1 === 0;
@@ -73,12 +73,25 @@ $(function() {
         el.datepicker(datepickerOptions);
     };
 
+    unsetTimeOfDate = function(dateObj) {
+        if (!(dateObj instanceof Date)) throw new TypeError('expected Date object');
+
+        dateObj.setMilliseconds(0);
+        dateObj.setSeconds(0);
+        dateObj.setMinutes(0);
+        dateObj.setHours(0);
+
+        return dateObj;
+    };
+
     getFirstOfMonth = function(dateObj) {
         if (!(dateObj instanceof Date)) {
             dateObj = new Date();
         }
 
-        return new Date(dateObj.setDate(1));
+        dateObj.setDate(1);
+
+        return unsetTimeOfDate(dateObj);
     };
 
     getLastOfMonth = function(dateObj) {
@@ -88,9 +101,12 @@ $(function() {
             dateObj = new Date();
         }
 
-        firstOfNextMonth = getFirstOfMonth(new Date(dateObj.setDate(1) + 31 * 24 * 60 * 60 * 1000));
+        // add 32 days because in case of daylight saving there can be one hour missing
+        firstOfNextMonth = getFirstOfMonth(
+            new Date(getFirstOfMonth(dateObj).getTime() + 32 * 24 * 60 * 60 * 1000)
+        );
 
-        return new Date(firstOfNextMonth - 24 * 60 * 60 * 1000);
+        return unsetTimeOfDate(new Date(firstOfNextMonth.getTime() - 12 * 60 * 60 * 1000));
     };
 
     itemUpdate = function(item) {
