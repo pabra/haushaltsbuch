@@ -668,7 +668,27 @@ $(function() {
 
     if ('update' === page) {
         $('button.updates_check').on('click', function(x) {
-            window.console.log('x', x);
+            $.ajax({
+                dataType: "json",
+                url: '/update/check',
+                method: 'PUT',
+                success: function(data) {
+                    window.console.log('data', data);
+                    location.href += '';
+                }
+            });
+        });
+
+        $('button.updates_do').on('click', function(x) {
+            $.ajax({
+                dataType: "json",
+                url: '/update/do',
+                method: 'PUT',
+                success: function(data) {
+                    window.console.log('data', data);
+                    location.href += '';
+                }
+            });
         });
     }
 

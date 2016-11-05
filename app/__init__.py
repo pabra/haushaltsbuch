@@ -240,7 +240,7 @@ def update_check():
 @app.route('/update/do', methods=['PUT'])
 def update_do():
     update.update()
-    shutdown_server()
+    # shutdown_server()
 
     return jsonify({'OK': True,
                     'status': 200})

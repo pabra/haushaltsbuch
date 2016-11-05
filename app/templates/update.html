@@ -11,7 +11,6 @@ var datepickerDateFormat = {{ g.config['DATEPICKER_DATE_FORMAT'] | json | safe }
 /*]]>*/
 </script>
 Check for updates every {{ g.config['CHECK_FOR_UPDATES'] }} day(s).<br/>
-Last checked for updates: {{ last_checked }}<br/>
 Last checked for updates: <span {% if last_checked %}class="formatLocaleDate"{% endif %} data-format="yy-mm-dd">{{ last_checked }}</span><br/>
     {% if error_msg: %}
     <p class="error">{{ error_msg }}</p>
@@ -27,7 +26,9 @@ Last checked for updates: <span {% if last_checked %}class="formatLocaleDate"{% 
             </tr>
             {% for commit in commits_behind: %}
             <tr>
-                <td>{{ commit.hexsha[:7] }}</td>
+                <td>
+                    <a href="https://github.com/pabra/haushaltsbuch/commit/{{ commit.hexsha }}" target="_blank">{{ commit.hexsha[:7] }}</a>
+                </td>
                 <td class="formatLocaleDate" data-format="@">{{ commit.authored_date * 1000 }}</td>
                 <td><a href="mailto:{{ commit.author.email | escape }}" target="_blank">{{ commit.author.name | escape }}</a></td>
                 <td>{{ commit.summary }}</td>
