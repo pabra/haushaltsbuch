@@ -22,8 +22,6 @@ git clone https://github.com/pabra/haushaltsbuch.git
 cd haushaltsbuch
 # get virtualenv for Ubuntu - for other distributions search for `virtualenv` in the repository
 sudo apt-get install python-virtualenv python3-dev
-# have `env` at an expected place
-[ ! -x /bin/env ] && sudo ln -s /usr/bin/env /bin
 # set up a virtual environment in `venv` directory and activate it
 virtualenv -p $(which python3) venv
 source venv/bin/activate
