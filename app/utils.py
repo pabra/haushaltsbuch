@@ -13,7 +13,7 @@ def get_order_by_from_request(req):
             raise TypeError('Order must have a length of 2: %r' % (order_tuple,))
 
         if not all(isinstance(x, str) for x in order_tuple):
-            raise TypeError('Order must consist of 2 strings: %r' %(order_tuple,))
+            raise TypeError('Order must consist of 2 strings: %r' % (order_tuple,))
 
         if not order_tuple[1] in ('asc', 'desc'):
             raise ValueError('Order direction must be one of ("asc", "desc"), not: %r' % (order_tuple[1],))

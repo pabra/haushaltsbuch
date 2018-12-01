@@ -5,6 +5,7 @@ import sys
 from app import app
 from app.database import init_db, insert_rand
 
+
 def usage():
     print('''usage: %s [get_url|init_db|insert_rand]
 
@@ -21,12 +22,13 @@ def usage():
     ''' % sys.argv[0])
     sys.exit(1)
 
+
 def get_arg():
     if 2 == len(sys.argv) and sys.argv[1]:
         return sys.argv[1]
 
-    else:
-        return None
+    return None
+
 
 if '__main__' == __name__:
     host = app.config['HOST']

@@ -19,6 +19,7 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     fn()
 
+
 @app.before_request
 def before_request(force=False):
     if request.endpoint == 'static' and not force:
@@ -30,10 +31,12 @@ def before_request(force=False):
     if getattr(g, 'config', None) is None:
         g.config = app.config
 
+
 @app.before_first_request
 def before_first_request():
     before_request(force=True)
     update.refresh()
+
 
 @app.teardown_request
 @app.teardown_appcontext
@@ -42,38 +45,54 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+
 @app.errorhandler(404)
 def page_not_found(error):
     return 'This page does not exist', 404
+
 
 @app.route('/shutdown', methods=['POST'])
 def shutdown():
     shutdown_server()
     return 'Server shutting down...'
 
+
 @app.route('/')
 @app.route('/summary.html')
 def summary():
     updates_available, _ = database.kv_get('updates_available', 'int')
-    categories_dict, category_ids, summary = database.get_summary()
-    return render_template('summary.html', page='summary', updates_available=updates_available, categories_dict=categories_dict, category_ids=category_ids, summary=summary)
+    categories_dict, category_ids, summary_data = database.get_summary()
+    return render_template('summary.html',
+                           page='summary',
+                           updates_available=updates_available,
+                           categories_dict=categories_dict,
+                           category_ids=category_ids,
+                           summary=summary_data)
+
 
 @app.route('/expense.html')
 def expense_index():
     updates_available, _ = database.kv_get('updates_available', 'int')
     datepicker_locale_strings = get_datepicker_translations()
-    return render_template('expense.html', page='expense', updates_available=updates_available, datepicker_locale_strings=datepicker_locale_strings)
+    return render_template('expense.html',
+                           page='expense',
+                           updates_available=updates_available,
+                           datepicker_locale_strings=datepicker_locale_strings)
+
 
 @app.route('/category.html')
 def category_index():
     updates_available, _ = database.kv_get('updates_available', 'int')
-    return render_template('category.html', page='category', updates_available=updates_available)
+    return render_template('category.html',
+                           page='category',
+                           updates_available=updates_available)
 
 
 # category REST API
 @app.route('/category/get', methods=['GET'])
 def category_get_all():
     return jsonify({'data': database.get_all_categories()})
+
 
 @app.route('/category/update', methods=['POST'])
 def category_update():
@@ -91,7 +110,8 @@ def category_update():
         d['error'] = str(e)
         status = 500
 
-    return  jsonify(d), status
+    return jsonify(d), status
+
 
 @app.route('/category/add', methods=['POST'])
 def category_add():
@@ -110,6 +130,7 @@ def category_add():
         status = 500
 
     return jsonify(d), status
+
 
 @app.route('/category/<int:category_id>', methods=['DELETE'])
 def category_delete(category_id):
@@ -140,6 +161,7 @@ def expense_get_all():
                                   filter_by=filter_list)
     )})
 
+
 @app.route('/expense/update', methods=['POST'])
 def expense_update():
     d = {'method': request.method,
@@ -157,7 +179,8 @@ def expense_update():
         d['error'] = str(e)
         status = 500
 
-    return  jsonify(database.date_to_json(d)), status
+    return jsonify(database.date_to_json(d)), status
+
 
 @app.route('/expense/add', methods=['POST'])
 def expense_add():
@@ -177,6 +200,7 @@ def expense_add():
         status = 500
 
     return jsonify(database.date_to_json(d)), status
+
 
 @app.route('/expense/<int:expense_id>', methods=['DELETE'])
 def expense_delete(expense_id):
@@ -200,15 +224,17 @@ def expense_delete(expense_id):
 @app.route('/summary/get', methods=['GET'])
 def summary_get_all():
 
-    categories_dict, category_ids, summary = database.get_summary()
+    categories_dict, category_ids, summary_data = database.get_summary()
     return jsonify({'categories_dict': categories_dict,
                     'category_ids': category_ids,
-                    'summary': summary})
+                    'summary': summary_data})
+
 
 @app.route('/summary/get/<int:year>', methods=['GET'])
 def summary_get_year(year):
-    categories_dict, category_ids, summary = database.get_summary(year)
-    return jsonify({'summary': summary})
+    _, _, summary_data = database.get_summary(year)
+    return jsonify({'summary': summary_data})
+
 
 # update page
 @app.route('/update.html')
@@ -230,12 +256,14 @@ def update_route():
                            commits_behind=commits_behind,
                            error_msg=error_msg)
 
+
 @app.route('/update/check', methods=['PUT'])
 def update_check():
     update.refresh(force=True)
 
     return jsonify({'OK': True,
                     'status': 200})
+
 
 @app.route('/update/do', methods=['PUT'])
 def update_do():
