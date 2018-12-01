@@ -36,7 +36,8 @@ var decimalChar = {{ g.config['DECIMAL_CHAR'] | json | safe }},
             </th>
                 <!-- ko foreach: {data: $root.categoriesOrder, as: 'categoryId'} -->
             <td class="value" data-bind="text: rowMonth['locale_value_' + categoryId],
-                                         style: {backgroundColor: $root.categoriesById[categoryId].color}"></td>
+                                         style: {backgroundColor: $root.categoriesById[categoryId].color},
+                                         css: {is_dark: $root.categoriesById[categoryId].isDark}"></td>
                 <!-- /ko -->
             <td class="value" data-bind="text: rowMonth.locale_value_total,
                                          click: $root.filterMonth">
@@ -60,7 +61,8 @@ var decimalChar = {{ g.config['DECIMAL_CHAR'] | json | safe }},
             </th>
             <!-- ko foreach: {data: $parent.categoriesOrder, as: 'categoryId'} -->
             <td class="value" data-bind="text: rowYear['locale_value_' + categoryId],
-                                         style: {backgroundColor: $root.categoriesById[categoryId].color}"></td>
+                                         style: {backgroundColor: $root.categoriesById[categoryId].color},
+                                         css: {is_dark: $root.categoriesById[categoryId].isDark}"></td>
             <!-- /ko -->
             <td class="value" data-bind="text: rowYear.locale_value_total"></td>
         </tr>

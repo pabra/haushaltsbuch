@@ -110,7 +110,8 @@ table.observable tr:last-child td {
 }
 
 table.observable tr.is_dark td,
-table.observable option.is_dark {
+table.observable option.is_dark,
+table.observable td.is_dark {
     color: #fff;
 }
 

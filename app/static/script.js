@@ -652,6 +652,10 @@ $(function() {
                 $.getJSON('/' + page + '/get', function(data) {
                     formatCurrencyForRows(data.summary);
                     addObservables(data.summary);
+                    ko.utils.objectForEach(data.categories_dict, function (k, v) {
+                        var tc = tinycolor(v.color);
+                        v.isDark = tc.isDark();
+                    });
                     self.categoriesById = data.categories_dict;
                     self.categoriesOrder(data.category_ids);
                     self.summaryAllYears(data.summary);
