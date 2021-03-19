@@ -1,9 +1,11 @@
-Click==7.0
-Flask==1.0.2
-gitdb2==2.0.5
-GitPython==2.1.11
+# pip install Flask GitPython
+
+click==7.1.2
+Flask==1.1.2
+gitdb==4.0.5
+GitPython==3.1.14
 itsdangerous==1.1.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 MarkupSafe==1.1.1
-smmap2==2.0.5
-Werkzeug==0.15.2
+smmap==3.0.5
+Werkzeug==1.0.1
