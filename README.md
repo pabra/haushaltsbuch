@@ -1,5 +1,4 @@
-INFO
-====
+# INFO
 
 A simple tool to track your expenses. This might be the next evolutionary step after
 a spreadsheet for this purpose and before using a more complex tool that wants
@@ -12,9 +11,7 @@ It runs in a Python virtual environment, serves on top of Flask and stores your
 data in a SQLite database. The user interface runs entirely in your browser using
 jQuery, jQuery UI and Knockout.
 
-
-SETUP
-=====
+# SETUP
 
 ```bash
 # clone the repository
@@ -35,9 +32,7 @@ vim config.py
 ./run.py init_db
 ```
 
-
-RUN
-===
+# RUN
 
 ```bash
 ./run_local.sh
