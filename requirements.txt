@@ -1,7 +1,7 @@
 # pip install Flask GitPython
 
 click==7.1.2
-Flask==1.1.2
+Flask==2.3.2
 gitdb==4.0.5
 GitPython==3.1.14
 itsdangerous==1.1.0
